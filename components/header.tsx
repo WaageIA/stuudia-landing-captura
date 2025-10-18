@@ -11,7 +11,7 @@ export function Header() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border"
     >
-      <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+      <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-center">
         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
           <Image
             src="/logo-studia-white.png"
@@ -21,13 +21,6 @@ export function Header() {
             priority
           />
         </motion.div>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-foreground hover:text-primary transition-colors"
-        >
-          Login
-        </motion.button>
       </div>
     </motion.header>
   )

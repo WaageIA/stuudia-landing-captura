@@ -3,8 +3,72 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowDown } from "lucide-react"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { useEffect, useState } from "react"
+
+// Array de imagens de comparação antes/depois
+// Cada imagem já contém o antes e depois lado a lado
+const beforeAfterExamples = [
+  {
+    id: 1,
+    image: "/img-01.webp",
+    alt: "Comparação antes e depois - Exemplo 1",
+  },
+  {
+    id: 2,
+    image: "/img-02.webp",
+    alt: "Comparação antes e depois - Exemplo 2",
+  },
+  {
+    id: 3,
+    image: "/img-03.webp",
+    alt: "Comparação antes e depois - Exemplo 3",
+  },
+  {
+    id: 4,
+    image: "/img-04.webp",
+    alt: "Comparação antes e depois - Exemplo 4",
+  },
+  {
+    id: 5,
+    image: "/img-05.webp",
+    alt: "Comparação antes e depois - Exemplo 5",
+  },
+  {
+    id: 6,
+    image: "/img-06.webp",
+    alt: "Comparação antes e depois - Exemplo 6",
+  },
+]
 
 export function HeroSection() {
+  const [isMobile, setIsMobile] = useState(false)
+  const [api, setApi] = useState<any>()
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
+  // Autoplay apenas no mobile
+  useEffect(() => {
+    if (!api || !isMobile) return
+
+    const autoplay = setInterval(() => {
+      api.scrollNext()
+    }, 3000)
+
+    return () => clearInterval(autoplay)
+  }, [api, isMobile])
+
   const scrollToForm = () => {
     const formSection = document.getElementById("form-section")
     formSection?.scrollIntoView({ behavior: "smooth" })
@@ -66,36 +130,61 @@ export function HeroSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="mb-8 sm:mb-12 relative max-w-4xl mx-auto"
+            className="mb-8 sm:mb-12 relative max-w-3xl mx-auto"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="relative rounded-2xl overflow-hidden bg-card border border-border p-3 sm:p-4"
+            {/* Container com efeito fade nas pontas (desktop) */}
+            <div className="relative">
+              {/* Gradientes laterais para efeito fade no desktop */}
+              <div className="hidden md:block absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+              <div className="hidden md:block absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
+              
+              <Carousel
+                setApi={setApi}
+                opts={{
+                  align: "center",
+                  loop: true,
+                }}
+                className="w-full"
               >
-                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 bg-background/80 backdrop-blur-sm px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium z-10">
-                  Antes
+                <CarouselContent>
+                  {beforeAfterExamples.map((example) => (
+                    <CarouselItem key={example.id}>
+                      <div className="px-2">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          className="relative rounded-3xl overflow-hidden bg-card border border-border p-2 sm:p-3"
+                        >
+                          {/* Gradientes laterais para esfumaçar */}
+                          <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none rounded-l-3xl" />
+                          <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none rounded-r-3xl" />
+                          
+                          <img
+                            src={example.image}
+                            alt={example.alt}
+                            className="w-full h-80 sm:h-96 md:h-[420px] lg:h-[480px] object-cover rounded-2xl"
+                          />
+                        </motion.div>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                
+                {/* Setas de navegação - visíveis apenas no desktop */}
+                <CarouselPrevious className="hidden md:flex -left-12" />
+                <CarouselNext className="hidden md:flex -right-12" />
+              </Carousel>
+              
+              {/* Indicadores (dots) */}
+              {beforeAfterExamples.length > 1 && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {beforeAfterExamples.map((_, index) => (
+                    <div
+                      key={index}
+                      className="w-2 h-2 rounded-full bg-muted-foreground/30"
+                    />
+                  ))}
                 </div>
-                <img
-                  src="/simple-product-photo-on-white-background.jpg"
-                  alt="Foto simples de produto antes do processamento"
-                  className="w-full h-64 sm:h-72 md:h-80 object-cover rounded-xl"
-                />
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="relative rounded-2xl overflow-hidden bg-card border border-primary/20 p-3 sm:p-4"
-              >
-                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 bg-primary text-primary-foreground px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium z-10">
-                  Depois
-                </div>
-                <img
-                  src="/professional-product-photo-with-studio-lighting.jpg"
-                  alt="Foto profissional de produto após processamento com IA"
-                  className="w-full h-64 sm:h-72 md:h-80 object-cover rounded-xl"
-                />
-              </motion.div>
+              )}
             </div>
           </motion.div>
 

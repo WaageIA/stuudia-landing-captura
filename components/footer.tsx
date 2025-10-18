@@ -27,7 +27,7 @@ export function Footer() {
               />
             </div>
             <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed">
-              Transforme suas fotos de produto em imagens profissionais com Inteligência Artificial.
+              Transforme Fotos de Celular em Ensaios Profissionais de Estúdio — Sem Fotógrafo, Sem Estúdio, Sem Complicação.
             </p>
           </div>
 
@@ -35,22 +35,12 @@ export function Footer() {
             <h3 className="text-sm sm:text-base font-semibold mb-2 sm:mb-3">Links Rápidos</h3>
             <ul className="space-y-1.5 sm:space-y-2 text-xs sm:text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#how-it-works" className="text-muted-foreground hover:text-primary transition-colors">
                   Como Funciona
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Preços
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="#form-section" className="text-muted-foreground hover:text-primary transition-colors">
                   Contato
                 </a>
               </li>
