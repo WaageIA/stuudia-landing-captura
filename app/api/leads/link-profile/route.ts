@@ -4,6 +4,8 @@ import { getLeadByEmail, linkLeadWithProfile } from '@/lib/db/queries'
 import { checkRateLimit, getClientIdentifier } from '@/lib/utils/rate-limit'
 import { sanitizeEmail, sanitizeString } from '@/lib/utils/security'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting

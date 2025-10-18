@@ -4,6 +4,8 @@ import { checkEmailExists } from '@/lib/db/queries'
 import { checkRateLimit, getClientIdentifier } from '@/lib/utils/rate-limit'
 import { sanitizeEmail } from '@/lib/utils/security'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   try {
     // Rate limiting mais restritivo para verificação de email

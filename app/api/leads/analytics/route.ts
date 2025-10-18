@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getLeadStats, getLeadsByStatus } from '@/lib/db/queries'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   try {
     // Verificar se é uma requisição autorizada (opcional)

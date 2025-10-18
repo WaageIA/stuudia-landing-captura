@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+export const runtime = 'nodejs'
+
 export async function GET(request: NextRequest) {
   try {
     // Verificar configurações básicas
@@ -46,6 +48,7 @@ export async function GET(request: NextRequest) {
     try {
       const { validateLeadCapture } = await import('@/lib/validation/schemas')
       imports.zod = !!validateLeadCapture
+      imports.validation = !!validateLeadCapture
     } catch (e) {
       console.error('Zod import error:', e)
     }

@@ -5,6 +5,8 @@ import { sendWelcomeEmail } from '@/lib/email/client'
 import { checkRateLimit, getClientIdentifier } from '@/lib/utils/rate-limit'
 import { sanitizeString, sanitizeEmail, detectSuspiciousActivity } from '@/lib/utils/security'
 
+export const runtime = 'nodejs'
+
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting
