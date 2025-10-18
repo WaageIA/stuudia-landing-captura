@@ -15,19 +15,32 @@ export async function createLeadCapture(data: LeadCaptureInsert): Promise<LeadCa
   return lead
 }
 
-// Verificar se email já existe
+// Verificar se email já existe (leads + auth)
 export async function checkEmailExists(email: string): Promise<boolean> {
-  const { data, error } = await supabaseAdmin
+  // Verificar na tabela lead_captures
+  const { data: leadData, error: leadError } = await supabaseAdmin
     .from('lead_captures')
     .select('id')
     .eq('email', email)
     .single()
 
-  if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
-    throw new Error(`Failed to check email: ${error.message}`)
+  if (leadError && leadError.code !== 'PGRST116') {
+    throw new Error(`Failed to check lead email: ${leadError.message}`)
   }
 
-  return !!data
+  // Verificar na tabela auth.users
+  const { data: authData, error: authError } = await supabaseAdmin.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000, // Aumentar limite para buscar todos
+  })
+
+  if (authError) {
+    throw new Error(`Failed to check auth email: ${authError.message}`)
+  }
+
+  const userExists = authData.users.some(user => user.email === email)
+
+  return !!(leadData || userExists)
 }
 
 // Buscar lead por email

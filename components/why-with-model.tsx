@@ -46,7 +46,7 @@ export function WhyWithModel() {
           className="mb-12"
         >
           <h3 className="text-white text-lg sm:text-xl font-semibold mb-6 text-center">
-            Mas até hoje era impossível porque:
+            Mas até hoje era inviável porque:
           </h3>
           <div className="space-y-4">
             {problems.map((problem, index) => (

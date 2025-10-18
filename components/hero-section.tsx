@@ -1,8 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { ArrowDown } from "lucide-react"
 import {
   Carousel,
   CarouselContent,
@@ -11,6 +9,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import { useEffect, useState } from "react"
+import { CTAButton } from "./cta-button"
 
 // Array de imagens de comparação antes/depois
 // Cada imagem já contém o antes e depois lado a lado
@@ -68,11 +67,6 @@ export function HeroSection() {
 
     return () => clearInterval(autoplay)
   }, [api, isMobile])
-
-  const scrollToForm = () => {
-    const formSection = document.getElementById("form-section")
-    formSection?.scrollIntoView({ behavior: "smooth" })
-  }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
@@ -193,17 +187,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
           >
-            <Button
-              onClick={scrollToForm}
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 text-sm sm:text-base md:text-lg px-6 sm:px-8 py-5 sm:py-6 rounded-full font-semibold group"
-              aria-label="Rolar para o formulário de cadastro"
-            >
-              QUERO MEUS 50 CRÉDITOS
-              <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}>
-                <ArrowDown className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-              </motion.div>
-            </Button>
+            <CTAButton iconType="down" />
           </motion.div>
         </div>
       </div>

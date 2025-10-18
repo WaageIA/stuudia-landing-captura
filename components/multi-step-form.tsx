@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,6 +17,7 @@ import {
   Instagram,
   Facebook,
   Linkedin,
+  Loader2,
 } from "lucide-react"
 
 type FormData = {
@@ -51,8 +52,41 @@ export function MultiStepForm() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [errors, setErrors] = useState<ValidationErrors>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
+  const [emailChecking, setEmailChecking] = useState(false)
 
   const totalSteps = 3
+
+  // Função de debounce para verificação de email
+  const debounce = useCallback((func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout
+    return (...args: any[]) => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => func.apply(null, args), delay)
+    }
+  }, [])
+
+  const checkEmailRealtime = useCallback(
+    debounce(async (email: string) => {
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return
+      
+      setEmailChecking(true)
+      try {
+        const res = await fetch(`/api/leads/check-email?email=${encodeURIComponent(email)}`)
+        const data = await res.json()
+        
+        if (!data.available) {
+          setErrors(prev => ({ ...prev, email: 'Este email já está em uso. Use outro email ou faça login.' }))
+        } else {
+          setErrors(prev => ({ ...prev, email: undefined }))
+        }
+      } catch (err) {
+        console.error('Email check failed:', err)
+      } finally {
+        setEmailChecking(false)
+      }
+    }, 500),
+    [debounce]
+  )
 
   const validateField = (field: keyof FormData, value: string | boolean | string[] | null): string | undefined => {
     switch (field) {
@@ -455,10 +489,13 @@ export function MultiStepForm() {
                     type="email"
                     placeholder="seu@email.com"
                     value={formData.email}
-                    onChange={(e) => updateFormData("email", e.target.value)}
+                    onChange={(e) => {
+                      updateFormData("email", e.target.value)
+                      checkEmailRealtime(e.target.value)
+                    }}
                     onBlur={() => handleBlur("email")}
                     onKeyDown={(e) => e.key === "Enter" && isStepValid() && nextStep()}
-                    className={`h-12 sm:h-14 text-base sm:text-lg bg-background border-2 transition-all ${
+                    className={`h-12 sm:h-14 text-base sm:text-lg bg-background border-2 transition-all pr-12 ${
                       errors.email && touched.email
                         ? "border-destructive focus-visible:ring-destructive"
                         : "border-border focus-visible:border-primary"
@@ -466,22 +503,27 @@ export function MultiStepForm() {
                     aria-invalid={errors.email && touched.email ? "true" : "false"}
                     aria-describedby={errors.email && touched.email ? "email-error" : undefined}
                   />
-                  <AnimatePresence>
-                    {errors.email && touched.email && (
-                      <motion.div
-                        id="email-error"
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="flex items-center gap-2 mt-2 text-destructive text-sm"
-                        role="alert"
-                      >
-                        <AlertCircle className="w-4 h-4" />
-                        <span>{errors.email}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {emailChecking && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                    </div>
+                  )}
                 </div>
+                <AnimatePresence>
+                  {errors.email && touched.email && (
+                    <motion.div
+                      id="email-error"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-center gap-2 mt-2 text-destructive text-sm"
+                      role="alert"
+                    >
+                      <AlertCircle className="w-4 h-4" />
+                      <span>{errors.email}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           )}
