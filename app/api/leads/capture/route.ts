@@ -91,7 +91,8 @@ export async function POST(request: NextRequest) {
       name: validatedData.name,
       email: validatedData.email,
       whatsapp: validatedData.whatsapp,
-      origin: validatedData.origin
+      origin: validatedData.origin,
+      leadId: lead.id
     })
 
     // Log de auditoria

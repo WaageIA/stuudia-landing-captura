@@ -62,6 +62,7 @@ export async function POST(req: Request) {
       email,
       whatsapp,
       origin,
+      leadId: lead.id
     })
 
     return NextResponse.json({ ok: true, leadId: lead.id, emailSent: emailResult.success })
