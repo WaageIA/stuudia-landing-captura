@@ -14,7 +14,7 @@ export function FormSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 px-2">
+          <h2 className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-3 sm:mb-4 px-2">
             Comece agora com <span className="text-primary">50 créditos grátis</span>
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-2">

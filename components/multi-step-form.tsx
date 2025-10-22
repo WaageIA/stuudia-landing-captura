@@ -12,6 +12,7 @@ import {
   Check,
   Sparkles,
   AlertCircle,
+  AlertTriangle,
   User,
   Phone,
   Instagram,
@@ -32,6 +33,7 @@ type FormData = {
 type ValidationErrors = {
   name?: string
   email?: string
+  emailBusiness?: string // Erros de negócio (email já cadastrado)
   whatsapp?: string
   salesChannels?: string
   hasStore?: string // Added validation for store question
@@ -75,9 +77,9 @@ export function MultiStepForm() {
         const data = await res.json()
         
         if (!data.available) {
-          setErrors(prev => ({ ...prev, email: 'Este email já está em uso. Use outro email ou faça login.' }))
+          setErrors(prev => ({ ...prev, emailBusiness: 'Este email já está cadastrado. Use outro email ou faça login.' }))
         } else {
-          setErrors(prev => ({ ...prev, email: undefined }))
+          setErrors(prev => ({ ...prev, emailBusiness: undefined }))
         }
       } catch (err) {
         console.error('Email check failed:', err)
@@ -246,7 +248,11 @@ export function MultiStepForm() {
     switch (step) {
       case 1:
         return (
-          formData.name.length > 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !errors.name && !errors.email
+          formData.name.length > 2 &&
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+          !errors.name &&
+          !errors.email &&
+          !errors.emailBusiness // Bloquear avanço se email já cadastrado
         )
       case 2:
         const hasValidWhatsApp = formData.whatsapp.replace(/\D/g, "").length >= 10 && !errors.whatsapp
@@ -524,6 +530,36 @@ export function MultiStepForm() {
                     </motion.div>
                   )}
                 </AnimatePresence>
+                <AnimatePresence>
+                  {errors.emailBusiness && touched.email && (
+                    <motion.div
+                      id="email-business-warning"
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-start gap-2 mt-2 text-amber-600 text-sm bg-amber-50 border border-amber-200 rounded-md p-3"
+                      role="alert"
+                    >
+                      <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                      <div>
+                        {errors.emailBusiness.includes('faça login') ? (
+                          <>
+                            Este email já está cadastrado. Use outro email ou{' '}
+                            <Button
+                              variant="link"
+                              className="p-0 h-auto text-amber-700 hover:text-amber-800 underline font-medium"
+                              onClick={() => window.open('https://app.stuudia.com', '_blank')}
+                            >
+                              faça login
+                            </Button>
+                          </>
+                        ) : (
+                          <span>{errors.emailBusiness}</span>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           )}
@@ -534,14 +570,11 @@ export function MultiStepForm() {
                 <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 text-balance">
                   Só mais um passo! Conte-nos sobre você.
                 </h3>
-                <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
-                  Isso nos ajuda a personalizar sua experiência.
-                </p>
               </div>
 
               <div>
                 <Label className="text-sm sm:text-base font-semibold mb-3 block">
-                  Você é dono(a) de loja/ecommerce de moda?
+                  Você é dono(a) de loja física ou ecommerce?
                 </Label>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <Button
@@ -705,7 +738,7 @@ export function MultiStepForm() {
                   id="terms"
                   checked={formData.acceptTerms}
                   onCheckedChange={(checked) => updateFormData("acceptTerms", checked as boolean)}
-                  className="mt-0.5 sm:mt-1 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                  className="mt-0.5 sm:mt-1 h-6 w-6 border-2 transition-all cursor-pointer"
                   aria-describedby="terms-label"
                 />
                 <Label id="terms-label" htmlFor="terms" className="text-xs sm:text-sm leading-relaxed cursor-pointer">
@@ -725,24 +758,10 @@ export function MultiStepForm() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8">
-        {step > 1 && step < totalSteps && (
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex-1">
-            <Button
-              onClick={prevStep}
-              variant="outline"
-              size="lg"
-              className="w-full h-12 sm:h-14 text-base sm:text-lg bg-transparent hover:bg-secondary"
-              aria-label="Voltar para etapa anterior"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Voltar
-            </Button>
-          </motion.div>
-        )}
+      <div className="flex flex-col gap-3 mt-6 sm:mt-8">
         {step < totalSteps - 1 ? (
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: step > 1 ? 20 : 0 }}
             animate={{ opacity: 1, x: 0 }}
             className={step > 1 ? "flex-1" : "w-full"}
           >
@@ -771,6 +790,25 @@ export function MultiStepForm() {
             </Button>
           </motion.div>
         ) : null}
+        
+        {step > 1 && step < totalSteps && (
+          <motion.div 
+            initial={{ opacity: 0, x: step < totalSteps - 1 || step === 2 ? -20 : 0 }} 
+            animate={{ opacity: 1, x: 0 }} 
+            className="flex-1 order-first sm:order-none"
+          >
+            <Button
+              onClick={prevStep}
+              variant="outline"
+              size="lg"
+              className="w-full h-12 sm:h-14 text-base sm:text-lg bg-transparent hover:bg-secondary"
+              aria-label="Voltar para etapa anterior"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              Voltar
+            </Button>
+          </motion.div>
+        )}
       </div>
     </div>
   )
