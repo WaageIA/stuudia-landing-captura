@@ -28,7 +28,7 @@ export function useCMS(options: UseCMSOptions = {}): UseCMSReturn {
       setLoading(true)
       setError(null)
 
-      const response = await fetch(`/api/cms/content${!useCache ? '?refresh=true' : ''}`)
+      const response = await fetch(`/bonus-gratis/api/cms/content${!useCache ? '?refresh=true' : ''}`)
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
@@ -56,7 +56,7 @@ export function useCMS(options: UseCMSOptions = {}): UseCMSReturn {
 
   const clearCache = async () => {
     try {
-      const response = await fetch('/api/cms/content', {
+      const response = await fetch('/bonus-gratis/api/cms/content', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ export function useCMSHealth() {
       setLoading(true)
       setError(null)
 
-      const response = await fetch('/api/cms/health')
+      const response = await fetch('/bonus-gratis/api/cms/health')
       const data = await response.json()
 
       setHealth(data)

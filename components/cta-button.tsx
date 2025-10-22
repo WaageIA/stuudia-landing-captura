@@ -11,6 +11,11 @@ interface CTAButtonProps {
 
 export function CTAButton({ iconType = "down", className = "" }: CTAButtonProps) {
   const scrollToForm = () => {
+    // Track CTA click event
+    if (typeof window !== 'undefined' && window.trackCTAClick) {
+      window.trackCTAClick()
+    }
+    
     const formSection = document.getElementById("form-section")
     formSection?.scrollIntoView({ behavior: "smooth" })
   }

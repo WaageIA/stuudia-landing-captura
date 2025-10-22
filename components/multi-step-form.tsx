@@ -73,7 +73,7 @@ export function MultiStepForm() {
       
       setEmailChecking(true)
       try {
-        const res = await fetch(`/api/leads/check-email?email=${encodeURIComponent(email)}`)
+        const res = await fetch(`/bonus-gratis/api/leads/check-email?email=${encodeURIComponent(email)}`)
         const data = await res.json()
         
         if (!data.available) {
@@ -223,7 +223,7 @@ export function MultiStepForm() {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch("/api/lead", {
+      const res = await fetch("/bonus-gratis/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -235,6 +235,11 @@ export function MultiStepForm() {
       }
 
       setIsSubmitted(true)
+      
+      // Track lead capture event
+      if (typeof window !== 'undefined' && window.trackLeadCapture) {
+        window.trackLeadCapture()
+      }
     } catch (err) {
       setErrors((prev) => ({
         ...prev,
