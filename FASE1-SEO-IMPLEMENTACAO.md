@@ -115,6 +115,7 @@
 - Lighthouse (Chrome DevTools)
 - PageSpeed Insights
 
+-
 ### **Métricas a Acompanhar**:
 - Posições nas SERPs
 - CTR (Click Through Rate)
