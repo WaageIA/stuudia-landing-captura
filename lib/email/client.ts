@@ -210,8 +210,9 @@ export async function sendWelcomeEmail(data: {
     const template = getEmailTemplate(data)
     
     const fromEmail = process.env.FROM_EMAIL || 'noreply@mail.stuudia.com'
+    const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
     const result = await resend.emails.send({
-      from: fromEmail,
+      from: `${senderName} <${fromEmail}>`,
       to: [data.email],
       subject: template.subject,
       html: template.html,

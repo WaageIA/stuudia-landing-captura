@@ -16,8 +16,9 @@ export async function POST(request: NextRequest) {
 
     const tpl = getEmailTemplate({ name, email: to, origin })
 
+    const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
     const result = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'noreply@mail.stuudia.com',
+      from: `${senderName} <${process.env.FROM_EMAIL || 'noreply@mail.stuudia.com'}>`,
       to: [to],
       subject: tpl.subject,
       html: tpl.html,
