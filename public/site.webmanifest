@@ -2,7 +2,7 @@
   "name": "StuudIA - Fotos Profissionais com IA",
   "short_name": "StuudIA",
   "description": "Transforme fotos de celular em ensaios profissionais de estúdio com modelo IA em 30 segundos",
-  "start_url": "/",
+  "start_url": "/bonus-gratis/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
@@ -11,30 +11,16 @@
   "lang": "pt-BR",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "/bonus-gratis/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "/bonus-gratis/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "/screenshot-mobile-1.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "form_factor": "narrow"
-    },
-    {
-      "src": "/screenshot-desktop-1.png", 
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide"
     }
   ]
 }
