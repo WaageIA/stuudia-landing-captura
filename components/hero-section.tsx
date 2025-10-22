@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel"
 import { useEffect, useState } from "react"
 import { CTAButton } from "./cta-button"
+import Image from "next/image"
 
 // Array de imagens de comparação antes/depois
 // Cada imagem já contém o antes e depois lado a lado
@@ -152,10 +153,14 @@ export function HeroSection() {
                           <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none rounded-l-3xl" />
                           <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-24 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none rounded-r-3xl" />
                           
-                          <img
+                          <Image
                             src={example.image}
                             alt={example.alt}
+                            width={800}
+                            height={480}
                             className="w-full h-80 sm:h-96 md:h-[420px] lg:h-[480px] object-cover rounded-2xl"
+                            priority={example.id === 1}
+                            quality={90}
                           />
                         </motion.div>
                       </div>
