@@ -58,7 +58,7 @@ export function getEmailTemplate(data: {
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" style="padding: 10px 0 30px 0;">
-                          <a href="https://app.stuudia.com/auth/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}" style="display: inline-block; background: linear-gradient(135deg, #b8ff00 0%, #9ae600 100%); color: #121212; text-decoration: none; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; box-shadow: 0 8px 20px rgba(184, 255, 0, 0.35); transition: all 0.3s;">
+                          <a href="https://app.stuudia.com/login?lead=${data.leadId}&email=${encodeURIComponent(data.email)}" style="display: inline-block; background: linear-gradient(135deg, #b8ff00 0%, #9ae600 100%); color: #121212; text-decoration: none; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; box-shadow: 0 8px 20px rgba(184, 255, 0, 0.35); transition: all 0.3s;">
                             🚀 PEGAR MEUS 50 CRÉDITOS GRÁTIS
                           </a>
                         </td>
@@ -165,7 +165,7 @@ Parabéns, ${data.name}! Você acabou de dar o primeiro passo para revolucionar 
 Transforme uma simples foto da sua peça em um ensaio profissional com Inteligência Artificial. 50 créditos grátis estão esperando por você para começar agora!
 
 🚀 PEGAR MEUS 50 CRÉDITOS GRÁTIS:
-https://app.stuudia.com/auth/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}
+https://app.stuudia.com/login?lead=${data.leadId}&email=${encodeURIComponent(data.email)}
 
 🎯 Por que StuudIA vende 3x mais:
 📸 Foto que parece ter custado R$ 500 no fotógrafo - em menos de 1 minuto
