@@ -126,7 +126,7 @@ Endpoint para estatísticas e relatórios (requer autorização).
 ---
 
 #### 5. **GET /api/health**
-Endpoint de verificação de saúde da API.
+Endpoint de verificação de saúde da API. f
 
 **Response (200):**
 ```json
