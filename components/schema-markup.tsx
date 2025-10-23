@@ -48,12 +48,12 @@ export function SchemaMarkup() {
     "screenshot": [
       {
         "@type": "ImageObject",
-        "url": "https://stuudia.com/screenshot-1.jpg",
+        "url": "https://stuudia.com/bonus-gratis/screenshot-1.jpg",
         "caption": "Antes e depois - Transformação com StuudIA"
       },
       {
         "@type": "ImageObject", 
-        "url": "https://stuudia.com/screenshot-2.jpg",
+        "url": "https://stuudia.com/bonus-gratis/screenshot-2.jpg",
         "caption": "Interface do StuudIA"
       }
     ],

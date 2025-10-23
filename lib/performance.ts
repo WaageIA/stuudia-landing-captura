@@ -19,9 +19,9 @@ export const preloadCriticalResources = () => {
 
     // Preload de imagens críticas
     const criticalImages = [
-      '/img-01.webp',
-      '/img-02.webp',
-      '/logo-studia-white.png'
+      '/bonus-gratis/img-01.webp',
+      '/bonus-gratis/img-02.webp',
+      '/bonus-gratis/logo-studia-white.png'
     ]
 
     criticalImages.forEach(src => {

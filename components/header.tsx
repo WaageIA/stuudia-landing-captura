@@ -14,7 +14,7 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-center">
         <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 400 }}>
           <Image
-            src="/logo-studia-white.png"
+            src="/bonus-gratis/logo-studia-white.png"
             alt="StuudIA"
             width={140}
             height={32}

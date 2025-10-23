@@ -17,32 +17,32 @@ import Image from "next/image"
 const beforeAfterExamples = [
   {
     id: 1,
-    image: "/img-01.webp",
+    image: "/bonus-gratis/img-01.webp",
     alt: "Comparação antes e depois - Exemplo 1",
   },
   {
     id: 2,
-    image: "/img-02.webp",
+    image: "/bonus-gratis/img-02.webp",
     alt: "Comparação antes e depois - Exemplo 2",
   },
   {
     id: 3,
-    image: "/img-03.webp",
+    image: "/bonus-gratis/img-03.webp",
     alt: "Comparação antes e depois - Exemplo 3",
   },
   {
     id: 4,
-    image: "/img-04.webp",
+    image: "/bonus-gratis/img-04.webp",
     alt: "Comparação antes e depois - Exemplo 4",
   },
   {
     id: 5,
-    image: "/img-05.webp",
+    image: "/bonus-gratis/img-05.webp",
     alt: "Comparação antes e depois - Exemplo 5",
   },
   {
     id: 6,
-    image: "/img-06.webp",
+    image: "/bonus-gratis/img-06.webp",
     alt: "Comparação antes e depois - Exemplo 6",
   },
 ]

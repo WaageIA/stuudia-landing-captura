@@ -19,7 +19,7 @@ export function Footer() {
           <div>
             <div className="mb-2 sm:mb-3">
               <Image
-                src="/logo-studia-white.png"
+                src="/bonus-gratis/logo-studia-white.png"
                 alt="StuudIA"
                 width={160}
                 height={36}
