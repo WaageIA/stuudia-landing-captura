@@ -394,11 +394,11 @@ graph TD
 - **Conteúdo**: Copy persuasiva baseada na landing page
 - **CTA**: "🚀 PEGAR MEUS 50 CRÉDITOS GRÁTIS"
 - **Redes Sociais**: Instagram, TikTok, Facebook
-- **Suporte**: Email + WhatsApp
+- **Suporte**: Email
 
 #### Configuração Resend
 - **Domínio**: `mail.stuudia.com` (verificado)
-- **Remetente**: `noreply@mail.stuudia.com`
+- **Remetente**: `notificacoes@stuudia.com`
 - **Template**: HTML + Texto simples
 - **Tracking**: Logs de envio + falhas
 
@@ -454,7 +454,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 # Resend
 RESEND_API_KEY=re_TXz55ZDb_FkBTh4SQQLymNcbAESAHmjFp
-FROM_EMAIL=noreply@mail.stuudia.com
+FROM_EMAIL=notificacoes@stuudia.com
 
 # URLs
 NEXT_PUBLIC_LANDING_URL=https://stuudia.com/captura

@@ -119,15 +119,9 @@ export function getEmailTemplate(data: {
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center">
-                          <a href="https://www.instagram.com/stuudia" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-                            <img src="https://img.icons8.com/fluency/48/instagram-new.png" alt="Instagram" width="40" height="40" style="display: block; border-radius: 8px;"/>
-                          </a>
-                          <a href="https://www.tiktok.com/@stuudia" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-                            <img src="https://img.icons8.com/fluency/48/tiktok.png" alt="TikTok" width="40" height="40" style="display: block; border-radius: 8px;"/>
-                          </a>
-                          <a href="https://www.facebook.com/stuudia" style="display: inline-block; margin: 0 10px; text-decoration: none;">
-                            <img src="https://img.icons8.com/fluency/48/facebook-new.png" alt="Facebook" width="40" height="40" style="display: block; border-radius: 8px;"/>
-                          </a>
+                          <a href="https://www.instagram.com/stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #E4405F; font-weight: bold;">Instagram</a>
+                          <a href="https://www.tiktok.com/@stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #000000; font-weight: bold;">TikTok</a>
+                          <a href="https://www.facebook.com/stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #1877F2; font-weight: bold;">Facebook</a>
                         </td>
                       </tr>
                     </table>
@@ -139,8 +133,7 @@ export function getEmailTemplate(data: {
                   <td style="padding: 40px; text-align: center; border-top: 1px solid #e5e5e5;">
                     <p style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 16px; font-weight: 600;">Precisa de ajuda?</p>
                     <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px;">
-                      <a href="mailto:suporte@stuudia.com" style="color: #b8ff00; text-decoration: none; font-weight: 500;">suporte@stuudia.com</a>
-                      ${data.whatsapp ? ` • <a href="https://wa.me/5562987645654" style="color: #b8ff00; text-decoration: none; font-weight: 500;">WhatsApp Suporte</a>` : ''}
+                      <a href="mailto:notificacoes@stuudia.com" style="color: #b8ff00; text-decoration: none; font-weight: 500;">notificacoes@stuudia.com</a>
                     </p>
                     <p style="margin: 20px 0 0 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
                       © 2025 StuudIA. Todos os direitos reservados.<br>
@@ -186,8 +179,7 @@ TikTok: https://www.tiktok.com/@stuudia
 Facebook: https://www.facebook.com/stuudia
 
 Precisa de ajuda?
-Email: suporte@stuudia.com
-WhatsApp: https://wa.me/5562987645654
+Email: notificacoes@stuudia.com
 
 ---
 Atenciosamente,
@@ -211,7 +203,7 @@ export async function sendWelcomeEmail(data: {
   try {
     const template = getEmailTemplate(data)
     
-    const fromEmail = process.env.FROM_EMAIL || 'noreply@mail.stuudia.com'
+    const fromEmail = process.env.FROM_EMAIL || 'notificacoes@stuudia.com'
     const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
     const result = await resend.emails.send({
       from: `${senderName} <${fromEmail}>`,
