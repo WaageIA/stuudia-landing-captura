@@ -108,6 +108,7 @@ export default function RootLayout({
         <link rel="manifest" href="/bonus-gratis/site.webmanifest" />
         <meta name="theme-color" content="#000000" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="facebook-domain-verification" content="sf6s9nx3hz29nek0q36k0r6vs542bd" />
       </head>
       <body className={`font-sans ${inter.variable} antialiased`}>
         <SchemaMarkup />
