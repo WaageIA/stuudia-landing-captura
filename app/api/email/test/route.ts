@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
 
     const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
     const result = await resend.emails.send({
-      from: `${senderName} <${process.env.FROM_EMAIL || 'notificacoes@stuudia.com'}>`,
+      from: `${senderName} <${process.env.FROM_EMAIL || 'notificacoes@mail.stuudia.com'}>`,
       to: [to],
       subject: tpl.subject,
       html: tpl.html,

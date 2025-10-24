@@ -56,7 +56,7 @@ export function MultiStepForm() {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [emailChecking, setEmailChecking] = useState(false)
 
-  const totalSteps = 3
+  const totalSteps = 2
 
   // Função de debounce para verificação de email
   const debounce = useCallback((func: Function, delay: number) => {
@@ -190,26 +190,11 @@ export function MultiStepForm() {
     if (step === 1) {
       const nameError = validateField("name", formData.name)
       const emailError = validateField("email", formData.email)
-
-      if (nameError || emailError) {
-        setErrors({ name: nameError, email: emailError })
-        setTouched({ name: true, email: true })
-        return
-      }
-    }
-
-    if (step === 2) {
-      const hasStoreError = validateField("hasStore", formData.hasStore)
-      const salesChannelsError = formData.hasStore ? validateField("salesChannels", formData.salesChannels) : undefined
       const whatsappError = validateField("whatsapp", formData.whatsapp)
 
-      if (hasStoreError || salesChannelsError || whatsappError || !formData.acceptTerms) {
-        setErrors({
-          hasStore: hasStoreError,
-          salesChannels: salesChannelsError,
-          whatsapp: whatsappError,
-        })
-        setTouched({ hasStore: true, salesChannels: true, whatsapp: true })
+      if (nameError || emailError || whatsappError) {
+        setErrors({ name: nameError, email: emailError, whatsapp: whatsappError })
+        setTouched({ name: true, email: true, whatsapp: true })
         return
       }
     }
@@ -223,10 +208,13 @@ export function MultiStepForm() {
 
   const handleSubmit = async () => {
     try {
+      // Automatically accept terms when submitting
+      const dataToSubmit = { ...formData, acceptTerms: true }
+
       const res = await fetch("/bonus-gratis/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSubmit),
       })
 
       if (!res.ok) {
@@ -252,18 +240,10 @@ export function MultiStepForm() {
   const isStepValid = () => {
     switch (step) {
       case 1:
-        return (
-          formData.name.length > 2 &&
-          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
-          !errors.name &&
-          !errors.email &&
-          !errors.emailBusiness // Bloquear avanço se email já cadastrado
-        )
-      case 2:
+        const hasValidName = formData.name.length > 2 && !errors.name
+        const hasValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && !errors.email && !errors.emailBusiness
         const hasValidWhatsApp = formData.whatsapp.replace(/\D/g, "").length >= 10 && !errors.whatsapp
-        const hasAnsweredStoreQuestion = formData.hasStore !== null
-        const hasValidSalesChannels = formData.hasStore === false || formData.salesChannels.length > 0
-        return hasValidWhatsApp && hasAnsweredStoreQuestion && hasValidSalesChannels && formData.acceptTerms
+        return hasValidName && hasValidEmail && hasValidWhatsApp
       default:
         return false
     }
@@ -386,8 +366,7 @@ export function MultiStepForm() {
         <div className="flex justify-between mb-3 sm:mb-4">
           {[
             { num: 1, label: "Dados", icon: User },
-            { num: 2, label: "Qualificação", icon: Phone },
-            { num: 3, label: "Sucesso", icon: Check },
+            { num: 2, label: "Sucesso", icon: Check },
           ].map(({ num, label, icon: Icon }) => (
             <div key={num} className="flex flex-col items-center flex-1">
               <motion.div
@@ -566,129 +545,6 @@ export function MultiStepForm() {
                   )}
                 </AnimatePresence>
               </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-5 sm:space-y-6">
-              <div>
-                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold mb-2 text-balance">
-                  Só mais um passo! Conte-nos sobre você.
-                </h3>
-              </div>
-
-              <div>
-                <Label className="text-sm sm:text-base font-semibold mb-3 block">
-                  Você é dono(a) de loja física ou ecommerce?
-                </Label>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <Button
-                    type="button"
-                    variant={formData.hasStore === true ? "default" : "outline"}
-                    size="lg"
-                    onClick={() => {
-                      updateFormData("hasStore", true)
-                      setTouched((prev) => ({ ...prev, hasStore: true }))
-                    }}
-                    className={`h-14 text-lg font-semibold transition-all ${
-                      formData.hasStore === true
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-background hover:bg-secondary"
-                    }`}
-                    aria-pressed={formData.hasStore === true}
-                  >
-                    SIM
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={formData.hasStore === false ? "default" : "outline"}
-                    size="lg"
-                    onClick={() => {
-                      updateFormData("hasStore", false)
-                      setTouched((prev) => ({ ...prev, hasStore: true }))
-                    }}
-                    className={`h-14 text-lg font-semibold transition-all ${
-                      formData.hasStore === false
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-background hover:bg-secondary"
-                    }`}
-                    aria-pressed={formData.hasStore === false}
-                  >
-                    NÃO
-                  </Button>
-                </div>
-                <AnimatePresence>
-                  {errors.hasStore && touched.hasStore && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="flex items-center gap-2 mt-2 text-destructive text-sm"
-                      role="alert"
-                    >
-                      <AlertCircle className="w-4 h-4" />
-                      <span>{errors.hasStore}</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <AnimatePresence>
-                {formData.hasStore === true && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Label className="text-sm sm:text-base font-semibold mb-3 block">
-                      Em quais canais você vende? (Selecione todos que se aplicam)
-                    </Label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
-                      {SALES_CHANNEL_OPTIONS.map((channel) => (
-                        <motion.div
-                          key={channel}
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <Button
-                            type="button"
-                            variant={formData.salesChannels.includes(channel) ? "default" : "outline"}
-                            size="lg"
-                            onClick={() => {
-                              toggleSalesChannel(channel)
-                              setTouched((prev) => ({ ...prev, salesChannels: true }))
-                            }}
-                            className={`w-full h-11 sm:h-12 text-sm sm:text-base transition-all ${
-                              formData.salesChannels.includes(channel)
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-background hover:bg-secondary"
-                            }`}
-                            aria-pressed={formData.salesChannels.includes(channel)}
-                          >
-                            {channel}
-                          </Button>
-                        </motion.div>
-                      ))}
-                    </div>
-                    <AnimatePresence>
-                      {errors.salesChannels && touched.salesChannels && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="flex items-center gap-2 mt-2 text-destructive text-sm"
-                          role="alert"
-                        >
-                          <AlertCircle className="w-4 h-4" />
-                          <span>{errors.salesChannels}</span>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
               <div>
                 <Label htmlFor="whatsapp" className="text-sm sm:text-base font-semibold mb-2 block">
@@ -702,6 +558,7 @@ export function MultiStepForm() {
                     value={formData.whatsapp}
                     onChange={(e) => updateFormData("whatsapp", e.target.value)}
                     onBlur={() => handleBlur("whatsapp")}
+                    onKeyDown={(e) => e.key === "Enter" && isStepValid() && nextStep()}
                     className={`h-12 sm:h-14 text-base sm:text-lg bg-background border-2 transition-all ${
                       errors.whatsapp && touched.whatsapp
                         ? "border-destructive focus-visible:ring-destructive"
@@ -731,57 +588,14 @@ export function MultiStepForm() {
                   Para enviarmos atualizações importantes
                 </p>
               </div>
-
-              {/* Terms acceptance */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="flex items-start space-x-2 sm:space-x-3 p-3 sm:p-4 bg-primary/5 rounded-xl border border-primary/20"
-              >
-                <Checkbox
-                  id="terms"
-                  checked={formData.acceptTerms}
-                  onCheckedChange={(checked) => updateFormData("acceptTerms", checked as boolean)}
-                  className="mt-0.5 sm:mt-1 h-6 w-6 border-2 transition-all cursor-pointer"
-                  aria-describedby="terms-label"
-                />
-                <Label id="terms-label" htmlFor="terms" className="text-xs sm:text-sm leading-relaxed cursor-pointer">
-                  Aceito receber comunicações do StuudIA e concordo com os{" "}
-                  <a href="#" className="text-primary hover:underline font-semibold">
-                    termos de uso
-                  </a>{" "}
-                  e{" "}
-                  <a href="#" className="text-primary hover:underline font-semibold">
-                    política de privacidade
-                  </a>
-                  .
-                </Label>
-              </motion.div>
             </div>
           )}
+
         </motion.div>
       </AnimatePresence>
 
       <div className="flex flex-col gap-3 mt-6 sm:mt-8">
-        {step < totalSteps - 1 ? (
-          <motion.div
-            initial={{ opacity: 0, x: step > 1 ? 20 : 0 }}
-            animate={{ opacity: 1, x: 0 }}
-            className={step > 1 ? "flex-1" : "w-full"}
-          >
-            <Button
-              onClick={nextStep}
-              disabled={!isStepValid()}
-              size="lg"
-              className="w-full h-12 sm:h-14 text-base sm:text-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-              aria-label="Avançar para próxima etapa"
-            >
-              Continuar
-              <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
-            </Button>
-          </motion.div>
-        ) : step === 2 ? (
+        {step === 1 ? (
           <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex-1">
             <Button
               onClick={handleSubmit}
@@ -793,27 +607,19 @@ export function MultiStepForm() {
               LIBERAR MEUS CRÉDITOS!
               <Sparkles className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
             </Button>
+            <p className="text-xs text-muted-foreground text-center mt-3 leading-relaxed">
+              Ao continuar, você aceita automaticamente os{" "}
+              <a href="#" className="text-primary hover:underline font-medium">
+                termos de uso
+              </a>{" "}
+              e{" "}
+              <a href="#" className="text-primary hover:underline font-medium">
+                política de privacidade
+              </a>
+              .
+            </p>
           </motion.div>
         ) : null}
-        
-        {step > 1 && step < totalSteps && (
-          <motion.div 
-            initial={{ opacity: 0, x: step < totalSteps - 1 || step === 2 ? -20 : 0 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            className="flex-1 order-first sm:order-none"
-          >
-            <Button
-              onClick={prevStep}
-              variant="outline"
-              size="lg"
-              className="w-full h-12 sm:h-14 text-base sm:text-lg bg-transparent hover:bg-secondary"
-              aria-label="Voltar para etapa anterior"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              Voltar
-            </Button>
-          </motion.div>
-        )}
       </div>
     </div>
   )

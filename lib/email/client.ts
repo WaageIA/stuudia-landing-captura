@@ -133,7 +133,7 @@ export function getEmailTemplate(data: {
                   <td style="padding: 40px; text-align: center; border-top: 1px solid #e5e5e5;">
                     <p style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 16px; font-weight: 600;">Precisa de ajuda?</p>
                     <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px;">
-                      <a href="mailto:notificacoes@stuudia.com" style="color: #b8ff00; text-decoration: none; font-weight: 500;">notificacoes@stuudia.com</a>
+                      <a href="mailto:contato@mail.stuudia.com" style="color: #b8ff00; text-decoration: none; font-weight: 500;">contato@mail.stuudia.com</a>
                     </p>
                     <p style="margin: 20px 0 0 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
                       © 2025 StuudIA. Todos os direitos reservados.<br>
@@ -179,7 +179,7 @@ TikTok: https://www.tiktok.com/@stuudia
 Facebook: https://www.facebook.com/stuudia
 
 Precisa de ajuda?
-Email: notificacoes@stuudia.com
+Email: contato@mail.stuudia.com
 
 ---
 Atenciosamente,
@@ -203,7 +203,7 @@ export async function sendWelcomeEmail(data: {
   try {
     const template = getEmailTemplate(data)
     
-    const fromEmail = process.env.FROM_EMAIL || 'notificacoes@stuudia.com'
+    const fromEmail = process.env.FROM_EMAIL || 'notificacoes@mail.stuudia.com'
     const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
     const result = await resend.emails.send({
       from: `${senderName} <${fromEmail}>`,
