@@ -12,7 +12,7 @@ async function testToken() {
     })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt(Math.floor(Date.now() / 1000))
-      .setExpirationTime(Math.floor(Date.now() / 1000) + 60 * 60)
+      .setExpirationTime(Math.floor(Date.now() / 1000) + 24 * 60 * 60)
 
     const token = await jwt.sign(secret)
     console.log('✅ Token gerado com sucesso:', token.substring(0, 50) + '...')
