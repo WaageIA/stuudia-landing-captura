@@ -145,8 +145,6 @@ export async function sendWelcomeEmail(data: {
   leadId: string
 }) {
   try {
-    console.log('📧 Iniciando envio de email para:', data.email)
-
     // Gerar link seguro com token
     const signupLink = await generateSignupLink(data.leadId, data.email)
 
@@ -155,8 +153,6 @@ export async function sendWelcomeEmail(data: {
       ...data,
       signupLink
     })
-
-    console.log('📝 Template preparado com link seguro')
     
     const fromEmail = process.env.FROM_EMAIL || 'notificacoes@mail.stuudia.com'
     const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
@@ -170,13 +166,6 @@ export async function sendWelcomeEmail(data: {
       headers: {
         'List-Unsubscribe': '<mailto:contato@mail.stuudia.com>'
       }
-    })
-
-    console.log('✅ Email enviado com sucesso:', {
-      to: data.email,
-      subject: template.subject,
-      messageId: result.data?.id,
-      leadId: data.leadId
     })
 
     return {

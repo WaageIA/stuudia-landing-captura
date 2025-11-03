@@ -5,10 +5,7 @@ const enc = new TextEncoder()
 // Use uma variável de ambiente específica para tokens de email
 const secret = enc.encode(process.env.EMAIL_LINK_SECRET || 'fallback-secret-change-in-production')
 
-// Debug: verificar qual chave está sendo usada
-console.log('🔑 EMAIL_LINK_SECRET definida:', !!process.env.EMAIL_LINK_SECRET)
-console.log('🔑 Chave sendo usada (primeiros 10 chars):', (process.env.EMAIL_LINK_SECRET || 'FALLBACK').substring(0, 10) + '...')
-console.log('🔑 Chave encoded length:', secret.length)
+// Verificação silenciosa da configuração
 
 export interface SignupTokenPayload {
   leadId: string
@@ -25,7 +22,6 @@ export async function createSignupToken(payload: SignupTokenPayload): Promise<st
     throw new Error(`Timestamp inválido: ${now}`)
   }
 
-  console.log('🕒 Gerando token com timestamp:', now, new Date(now * 1000).toISOString())
 
   const jwt = new SignJWT({
     leadId: payload.leadId,
@@ -39,7 +35,6 @@ export async function createSignupToken(payload: SignupTokenPayload): Promise<st
     .setAudience('stuudia-app')
 
   const token = await jwt.sign(secret)
-  console.log('✅ Token gerado com sucesso:', token.substring(0, 20) + '...')
 
   return token
 }
