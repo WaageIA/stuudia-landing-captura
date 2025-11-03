@@ -1,9 +1,14 @@
-const { SignJWT } = require('jose')
+import { SignJWT } from 'jose'
 
 const enc = new TextEncoder()
 
 // Use uma variável de ambiente específica para tokens de email
 const secret = enc.encode(process.env.EMAIL_LINK_SECRET || 'fallback-secret-change-in-production')
+
+// Debug: verificar qual chave está sendo usada
+console.log('🔑 EMAIL_LINK_SECRET definida:', !!process.env.EMAIL_LINK_SECRET)
+console.log('🔑 Chave sendo usada (primeiros 10 chars):', (process.env.EMAIL_LINK_SECRET || 'FALLBACK').substring(0, 10) + '...')
+console.log('🔑 Chave encoded length:', secret.length)
 
 export interface SignupTokenPayload {
   leadId: string
@@ -12,7 +17,6 @@ export interface SignupTokenPayload {
 }
 
 export async function createSignupToken(payload: SignupTokenPayload): Promise<string> {
-  // Timestamp mais robusto com validação
   const now = Math.floor(Date.now() / 1000)
 
   // Validação de sanidade do timestamp
