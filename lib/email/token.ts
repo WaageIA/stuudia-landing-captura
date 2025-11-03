@@ -12,7 +12,16 @@ export interface SignupTokenPayload {
 }
 
 export async function createSignupToken(payload: SignupTokenPayload): Promise<string> {
+  // Timestamp mais robusto com validação
   const now = Math.floor(Date.now() / 1000)
+
+  // Validação de sanidade do timestamp
+  if (now < 1700000000 || now > 2000000000) {
+    console.error('❌ Timestamp inválido detectado:', now, new Date(now * 1000).toISOString())
+    throw new Error(`Timestamp inválido: ${now}`)
+  }
+
+  console.log('🕒 Gerando token com timestamp:', now, new Date(now * 1000).toISOString())
 
   const jwt = new SignJWT({
     leadId: payload.leadId,
@@ -25,5 +34,8 @@ export async function createSignupToken(payload: SignupTokenPayload): Promise<st
     .setIssuer('stuudia-signup')
     .setAudience('stuudia-app')
 
-  return await jwt.sign(secret)
+  const token = await jwt.sign(secret)
+  console.log('✅ Token gerado com sucesso:', token.substring(0, 20) + '...')
+
+  return token
 }
