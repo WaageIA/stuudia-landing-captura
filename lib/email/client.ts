@@ -8,6 +8,9 @@ if (!process.env.RESEND_API_KEY) {
 
 export { resend }
 
+// Import functions from the new token system
+import { generateSignupLink } from './links'
+
 // Template de email CTA
 export function getEmailTemplate(data: {
   name: string
@@ -15,9 +18,10 @@ export function getEmailTemplate(data: {
   whatsapp?: string
   origin: string
   leadId: string
+  signupLink?: string // Novo parâmetro opcional para link com token
 }) {
   return {
-    subject: 'Bem-vindo(a) ao StuudIA! 🎉',
+    subject: `Olá, ${data.name}. Seu acesso ao StuudIA`,
     html: `
       <!DOCTYPE html>
       <html lang="pt-BR">
@@ -43,47 +47,23 @@ export function getEmailTemplate(data: {
                 <!-- Conteúdo principal -->
                 <tr>
                   <td style="padding: 50px 40px;">
-                    <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 28px; font-weight: 600;">Suas fotos de produto, em nível de estúdio! 🎯</h2>
+                    <h2 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 24px; font-weight: 600;">Bem-vindo, ${data.name}</h2>
                     
-                    <p style="margin: 0 0 20px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
-                      <strong>Parabéns, ${data.name}!</strong> Você acabou de dar o primeiro passo para revolucionar suas vendas.
+                    <p style="margin: 0 0 16px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
+                      Recebemos seu cadastro e reservamos seu acesso ao StuudIA.
                     </p>
                     
-                    <p style="margin: 0 0 30px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
-                      Transforme uma simples foto da sua peça em um ensaio profissional com Inteligência Artificial. 
-                      <strong style="color: #b8ff00;">50 créditos grátis</strong> estão esperando por você para começar agora!
+                    <p style="margin: 0 0 24px 0; color: #4a4a4a; font-size: 16px; line-height: 1.6;">
+                      Para começar, acesse pelo link abaixo. Se tiver dúvidas, basta responder este e‑mail.
                     </p>
                     
                     <!-- CTA Button -->
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td align="center" style="padding: 10px 0 30px 0;">
-                          <a href="https://app.stuudia.com/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}" style="display: inline-block; background: linear-gradient(135deg, #b8ff00 0%, #9ae600 100%); color: #121212; text-decoration: none; padding: 18px 40px; border-radius: 50px; font-size: 18px; font-weight: 600; box-shadow: 0 8px 20px rgba(184, 255, 0, 0.35); transition: all 0.3s;">
-                            🚀 PEGAR MEUS 50 CRÉDITOS GRÁTIS
+                          <a href="${data.signupLink || `https://app.stuudia.com/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}`}" style="display: inline-block; background: #111111; color: #ffffff; text-decoration: none; padding: 12px 20px; border-radius: 8px; font-size: 16px; font-weight: 600;">
+                            Acessar seu cadastro
                           </a>
-                        </td>
-                      </tr>
-                    </table>
-                    
-                    <!-- Benefícios -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f8fff8; border-radius: 12px; padding: 30px; margin: 30px 0; border: 1px solid #e6ffe6;">
-                      <tr>
-                        <td>
-                          <h3 style="margin: 0 0 20px 0; color: #1a1a1a; font-size: 20px; font-weight: 600;">🎯 Por que StuudIA vende 3x mais:</h3>
-                          <table width="100%" cellpadding="8" cellspacing="0">
-                            <tr>
-                              <td style="color: #4a4a4a; font-size: 15px; line-height: 1.6;">📸 <strong>Foto que parece ter custado R$ 500 no fotógrafo</strong> - em menos de 1 minuto</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #4a4a4a; font-size: 15px; line-height: 1.6;">⚡ <strong>Processo completo = 30 segundos por peça</strong> - sem contratar modelo</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #4a4a4a; font-size: 15px; line-height: 1.6;">🎨 <strong>Iluminação profissional de estúdio</strong> - cores idênticas ao produto real</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #4a4a4a; font-size: 15px; line-height: 1.6;">💰 <strong>40 peças novas? = 20 minutos de trabalho</strong> - matematicamente viável</td>
-                            </tr>
-                          </table>
                         </td>
                       </tr>
                     </table>
@@ -112,28 +92,14 @@ export function getEmailTemplate(data: {
                   </td>
                 </tr>
                 
-                <!-- Redes Sociais -->
-                <tr>
-                  <td style="background-color: #fafafa; padding: 30px 40px; text-align: center; border-top: 1px solid #e5e5e5;">
-                    <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px; font-weight: 600;">Siga-nos nas redes sociais:</p>
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td align="center">
-                          <a href="https://www.instagram.com/stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #E4405F; font-weight: bold;">Instagram</a>
-                          <a href="https://www.tiktok.com/@stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #000000; font-weight: bold;">TikTok</a>
-                          <a href="https://www.facebook.com/stuudia" style="display: inline-block; margin: 0 15px; text-decoration: none; color: #1877F2; font-weight: bold;">Facebook</a>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
+                
                 
                 <!-- Footer -->
                 <tr>
                   <td style="padding: 40px; text-align: center; border-top: 1px solid #e5e5e5;">
                     <p style="margin: 0 0 15px 0; color: #1a1a1a; font-size: 16px; font-weight: 600;">Precisa de ajuda?</p>
-                    <p style="margin: 0 0 20px 0; color: #6b7280; font-size: 14px;">
-                      <a href="mailto:contato@mail.stuudia.com" style="color: #b8ff00; text-decoration: none; font-weight: 500;">contato@mail.stuudia.com</a>
+                    <p style="margin: 0 0 10px 0; color: #6b7280; font-size: 14px;">
+                      Responda este e‑mail ou fale com a gente: <a href="mailto:contato@mail.stuudia.com" style="color: #111111; text-decoration: underline; font-weight: 500;">contato@mail.stuudia.com</a>
                     </p>
                     <p style="margin: 20px 0 0 0; color: #9ca3af; font-size: 12px; line-height: 1.5;">
                       © 2025 StuudIA. Todos os direitos reservados.<br>
@@ -151,43 +117,21 @@ export function getEmailTemplate(data: {
       </html>
     `,
     text: `
-Suas fotos de produto, em nível de estúdio! 🎯
+Olá, ${data.name}. Recebemos seu cadastro no StuudIA.
 
-Parabéns, ${data.name}! Você acabou de dar o primeiro passo para revolucionar suas vendas.
+Acesse seu cadastro:
+${data.signupLink || `https://app.stuudia.com/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}`}
 
-Transforme uma simples foto da sua peça em um ensaio profissional com Inteligência Artificial. 50 créditos grátis estão esperando por você para começar agora!
+Se precisar de ajuda, basta responder este e‑mail.
 
-🚀 PEGAR MEUS 50 CRÉDITOS GRÁTIS:
-https://app.stuudia.com/signup?lead=${data.leadId}&email=${encodeURIComponent(data.email)}
-
-🎯 Por que StuudIA vende 3x mais:
-📸 Foto que parece ter custado R$ 500 no fotógrafo - em menos de 1 minuto
-⚡ Processo completo = 30 segundos por peça - sem contratar modelo
-🎨 Iluminação profissional de estúdio - cores idênticas ao produto real
-💰 40 peças novas? = 20 minutos de trabalho - matematicamente viável
-
-Seus dados:
+Dados:
 - Nome: ${data.name}
 - Email: ${data.email}
 ${data.whatsapp ? `- WhatsApp: ${data.whatsapp}` : ''}
 - Origem: ${data.origin}
 
----
-Siga-nos nas redes sociais:
-Instagram: https://www.instagram.com/stuudia
-TikTok: https://www.tiktok.com/@stuudia
-Facebook: https://www.facebook.com/stuudia
-
-Precisa de ajuda?
-Email: contato@mail.stuudia.com
-
----
-Atenciosamente,
-Equipe StuudIA
-
-© 2025 StuudIA. Todos os direitos reservados.
-Este email foi enviado porque você se cadastrou em nossa landing page.
-Se não foi você, pode ignorar este email.
+© 2025 StuudIA. Este email foi enviado porque você se cadastrou em nossa landing page.
+Se não foi você, ignore este email.
     `
   }
 }
@@ -201,7 +145,14 @@ export async function sendWelcomeEmail(data: {
   leadId: string
 }) {
   try {
-    const template = getEmailTemplate(data)
+    // Gerar link seguro com token
+    const signupLink = await generateSignupLink(data.leadId, data.email)
+
+    // Passar o link gerado para o template
+    const template = getEmailTemplate({
+      ...data,
+      signupLink
+    })
     
     const fromEmail = process.env.FROM_EMAIL || 'notificacoes@mail.stuudia.com'
     const senderName = process.env.EMAIL_SENDER_NAME || 'StuudIA'
@@ -211,6 +162,10 @@ export async function sendWelcomeEmail(data: {
       subject: template.subject,
       html: template.html,
       text: template.text,
+      reply_to: 'contato@mail.stuudia.com',
+      headers: {
+        'List-Unsubscribe': '<mailto:contato@mail.stuudia.com>'
+      }
     })
 
     return {
