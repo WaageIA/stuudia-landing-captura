@@ -257,7 +257,7 @@ NEXT_PUBLIC_API_URL=https://api.meustudioai.com
 
 # Email
 RESEND_API_KEY=re_xxx
-FROM_EMAIL=noreply@meustudioai.com
+FROM_EMAIL=noreply@stuudia.com
 
 # Database
 DATABASE_URL=postgresql://...

@@ -75,7 +75,7 @@ SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
 
 # Resend Email Configuration
 RESEND_API_KEY=your_resend_api_key_here
-FROM_EMAIL=noreply@meustudioai.com
+FROM_EMAIL=noreply@stuudia.com
 
 # Landing Page Configuration
 NEXT_PUBLIC_LANDING_URL=https://lp.meustudioai.com

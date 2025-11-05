@@ -30,7 +30,7 @@ export async function createSignupToken(payload: SignupTokenPayload): Promise<st
   })
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt(now)
-    .setExpirationTime(now + 24 * 60 * 60) // 24 horas
+    .setExpirationTime(now + 3 * 24 * 60 * 60) // 3 dias
     .setIssuer('stuudia-signup')
     .setAudience('stuudia-app')
 
