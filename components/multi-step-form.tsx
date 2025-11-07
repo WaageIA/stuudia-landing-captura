@@ -41,7 +41,11 @@ type ValidationErrors = {
 
 const SALES_CHANNEL_OPTIONS = ["Instagram", "Site Próprio", "Marketplace", "Shopping", "Loja Física", "Outros"]
 
-export function MultiStepForm() {
+interface MultiStepFormProps {
+  refCode?: string
+}
+
+export function MultiStepForm({ refCode }: MultiStepFormProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -208,8 +212,12 @@ export function MultiStepForm() {
 
   const handleSubmit = async () => {
     try {
-      // Automatically accept terms when submitting
-      const dataToSubmit = { ...formData, acceptTerms: true }
+      // Automatically accept terms when submitting and include ref code as origin
+      const dataToSubmit = {
+        ...formData,
+        acceptTerms: true,
+        origin: refCode || 'organic_search' // Adiciona o ref como origin
+      }
 
       const res = await fetch("/bonus-gratis/api/lead", {
         method: "POST",

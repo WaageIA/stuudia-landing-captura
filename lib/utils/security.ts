@@ -107,13 +107,13 @@ export function generateFingerprint(data: {
   screenResolution?: string
 }): string {
   const combined = `${data.userAgent}-${data.acceptLanguage}-${data.screenResolution || 'unknown'}`
-  
+
   // Hash simples usando built-in crypto (Node.js)
   if (typeof crypto !== 'undefined' && crypto.subtle) {
     // Em ambiente que suporta Web Crypto API
     return btoa(combined).slice(0, 16)
   }
-  
+
   // Fallback simples
   let hash = 0
   for (let i = 0; i < combined.length; i++) {
@@ -121,6 +121,46 @@ export function generateFingerprint(data: {
     hash = ((hash << 5) - hash) + char
     hash = hash & hash // Convert to 32bit integer
   }
-  
+
   return Math.abs(hash).toString(16).slice(0, 16)
+}
+
+// Validação específica para códigos de referência
+export function validateRefCode(ref: string): boolean {
+  if (!ref || typeof ref !== 'string') return false
+
+  const cleanRef = ref.trim().toUpperCase()
+
+  // Valores pré-definidos sempre válidos
+  const predefinedOrigins = [
+    'google_ads', 'facebook_ads', 'instagram_ads', 'linkedin_ads',
+    'youtube_ads', 'referral', 'organic_search', 'social_media',
+    'email_marketing', 'other'
+  ]
+
+  if (predefinedOrigins.includes(cleanRef.toLowerCase())) return true
+
+  // Padrões para códigos dinâmicos
+  return /^(REF_|VENDEDOR_)[A-Z0-9_]{3,20}$/.test(cleanRef)
+}
+
+// Sanitização específica para códigos de ref
+export function sanitizeRefCode(ref: string): string {
+  if (!ref) return 'organic_search'
+
+  const cleanRef = ref
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9_]/g, '_') // Remove caracteres especiais
+    .replace(/_{2,}/g, '_') // Remove underscores duplos
+    .slice(0, 30) // Limita tamanho
+
+  // Valida se está em formato correto
+  if (validateRefCode(cleanRef)) {
+    return cleanRef
+  }
+
+  // Fallback para casos inválidos
+  console.warn('Ref code sanitized to fallback:', cleanRef, '-> referral')
+  return 'referral'
 }

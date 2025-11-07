@@ -1,35 +1,37 @@
 import { z } from 'zod'
 
+// Schema para origem com suporte a códigos dinâmicos
+const OriginSchema = z.union([
+  // Valores pré-definidos (marketing)
+  z.enum([
+    'google_ads', 'facebook_ads', 'instagram_ads', 'linkedin_ads',
+    'youtube_ads', 'referral', 'organic_search', 'social_media',
+    'email_marketing', 'other'
+  ]),
+  // Códigos dinâmicos de vendedores (formato: VENDEDOR_XXX ou REF_XXX)
+  z.string().regex(/^REF_[A-Z0-9_]{3,20}$/, 'Código de referência inválido'),
+  z.string().regex(/^VENDEDOR_[A-Z0-9_]{3,20}$/, 'Código de vendedor inválido')
+], {
+  errorMap: () => ({ message: 'Origem inválida' })
+})
+
 // Schema para captura de lead
 export const LeadCaptureSchema = z.object({
   name: z.string()
     .min(2, 'Nome deve ter pelo menos 2 caracteres')
     .max(100, 'Nome deve ter no máximo 100 caracteres')
     .regex(/^[a-zA-ZÀ-ÿ\s]+$/, 'Nome deve conter apenas letras e espaços'),
-  
+
   email: z.string()
     .email('Email inválido')
     .max(255, 'Email muito longo'),
-  
+
   whatsapp: z.string()
     .regex(/^\(\d{2}\)\s\d{4,5}-\d{4}$/, 'WhatsApp deve estar no formato (11) 99999-9999')
     .optional()
     .or(z.literal('')),
-  
-  origin: z.enum([
-    'google_ads',
-    'facebook_ads', 
-    'instagram_ads',
-    'linkedin_ads',
-    'youtube_ads',
-    'referral',
-    'organic_search',
-    'social_media',
-    'email_marketing',
-    'other'
-  ], {
-    errorMap: () => ({ message: 'Origem inválida' })
-  }),
+
+  origin: OriginSchema,
   
   answers: z.object({
     is_store_owner: z.boolean(),

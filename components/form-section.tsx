@@ -3,7 +3,11 @@
 import { motion } from "framer-motion"
 import { MultiStepForm } from "./multi-step-form"
 
-export function FormSection() {
+interface FormSectionProps {
+  refCode?: string
+}
+
+export function FormSection({ refCode }: FormSectionProps) {
   return (
     <section id="form-section" className="py-16 sm:py-20 md:py-24 relative overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6">
@@ -29,7 +33,7 @@ export function FormSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="max-w-2xl mx-auto"
         >
-          <MultiStepForm />
+          <MultiStepForm refCode={refCode} />
         </motion.div>
       </div>
     </section>

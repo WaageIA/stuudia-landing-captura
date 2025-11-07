@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createLeadCapture, checkEmailExists } from "@/lib/db/queries"
-import { sanitizeEmail, sanitizeString } from "@/lib/utils/security"
+import { sanitizeEmail, sanitizeString, validateRefCode, sanitizeRefCode } from "@/lib/utils/security"
 import { sendWelcomeEmail } from "@/lib/email/client"
 
 export async function POST(req: Request) {
@@ -31,11 +31,13 @@ export async function POST(req: Request) {
     const hasStore = Boolean(data?.hasStore)
     const salesChannels = Array.isArray(data?.salesChannels) ? data.salesChannels : []
 
-    const origin = typeof data?.origin === "string" && data.origin.trim().length > 0
-      ? data.origin
-      : (typeof (req as any).headers?.get === "function"
-          ? ((req as any).headers.get("referer") ? "referral" : "other")
-          : "other")
+    // Validação específica para ref/origin
+    const rawOrigin = data?.origin || ''
+    const sanitizedOrigin = validateRefCode(rawOrigin) ? rawOrigin : sanitizeRefCode(rawOrigin)
+
+    const origin = sanitizedOrigin || (typeof (req as any).headers?.get === "function"
+      ? ((req as any).headers.get("referer") ? "referral" : "other")
+      : "other")
 
     const answers = {
       is_store_owner: hasStore,
@@ -63,6 +65,18 @@ export async function POST(req: Request) {
       whatsapp,
       origin,
       leadId: lead.id
+    })
+
+    // Log de auditoria com tracking de ref
+    console.log('Lead captured with ref tracking:', {
+      leadId: lead.id,
+      email: email,
+      origin: origin,
+      refType: origin.startsWith('REF_') ? 'dynamic_ref' :
+               origin.startsWith('VENDEDOR_') ? 'sales_ref' : 'predefined',
+      timestamp: new Date().toISOString(),
+      userAgent: req.headers.get('user-agent'),
+      ip: req.headers.get('x-forwarded-for') || 'unknown'
     })
 
     return NextResponse.json({ ok: true, leadId: lead.id, emailSent: emailResult.success })
