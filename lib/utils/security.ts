@@ -134,8 +134,8 @@ export function validateRefCode(ref: string): boolean {
   // Valores pré-definidos sempre válidos
   const predefinedOrigins = [
     'google_ads', 'facebook_ads', 'instagram_ads', 'linkedin_ads',
-    'youtube_ads', 'referral', 'organic_search', 'social_media',
-    'email_marketing', 'other'
+    'youtube_ads', 'instagram_link_bio', 'referral', 'organic_search',
+    'social_media', 'email_marketing', 'other'
   ]
 
   if (predefinedOrigins.includes(cleanRef.toLowerCase())) return true

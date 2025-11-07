@@ -5,8 +5,8 @@ const OriginSchema = z.union([
   // Valores pré-definidos (marketing)
   z.enum([
     'google_ads', 'facebook_ads', 'instagram_ads', 'linkedin_ads',
-    'youtube_ads', 'referral', 'organic_search', 'social_media',
-    'email_marketing', 'other'
+    'youtube_ads', 'instagram_link_bio', 'referral', 'organic_search',
+    'social_media', 'email_marketing', 'other'
   ]),
   // Códigos dinâmicos de vendedores (formato: VENDEDOR_XXX ou REF_XXX)
   z.string().regex(/^REF_[A-Z0-9_]{3,20}$/, 'Código de referência inválido'),
