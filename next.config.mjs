@@ -22,8 +22,9 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // SEM o basePath - o Next.js adiciona automaticamente quando basePath está configurado
         // Captura a rota raiz e todas as sub-rotas
-        source: '/bonus-gratis/:path*',
+        source: '/:path*',
         headers: [
           {
             key: 'X-Frame-Options',
@@ -44,7 +45,8 @@ const nextConfig = {
         ],
       },
       {
-        source: '/bonus-gratis/api/:path*',
+        // SEM o basePath - o Next.js adiciona automaticamente
+        source: '/api/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -53,7 +55,8 @@ const nextConfig = {
         ],
       },
       {
-        source: '/bonus-gratis/img/:path*',
+        // SEM o basePath - o Next.js adiciona automaticamente
+        source: '/img/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -66,13 +69,15 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/bonus-gratis/home',
-        destination: '/bonus-gratis/',
+        // SEM o basePath - o Next.js adiciona automaticamente quando basePath está configurado
+        source: '/home',
+        destination: '/',
         permanent: true,
       },
       {
-        source: '/bonus-gratis/inicio',
-        destination: '/bonus-gratis/',
+        // SEM o basePath - o Next.js adiciona automaticamente
+        source: '/inicio',
+        destination: '/',
         permanent: true,
       },
     ]
