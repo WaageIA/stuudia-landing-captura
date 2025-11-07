@@ -22,7 +22,8 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/bonus-gratis/(.*)',
+        // Captura a rota raiz e todas as sub-rotas
+        source: '/bonus-gratis/:path*',
         headers: [
           {
             key: 'X-Frame-Options',
@@ -43,7 +44,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/bonus-gratis/api/(.*)',
+        source: '/bonus-gratis/api/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -52,7 +53,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/bonus-gratis/img/(.*)',
+        source: '/bonus-gratis/img/:path*',
         headers: [
           {
             key: 'Cache-Control',
