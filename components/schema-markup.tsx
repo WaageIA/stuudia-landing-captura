@@ -4,7 +4,7 @@ export function SchemaMarkup() {
     "@type": "SoftwareApplication",
     "name": "StuudIA",
     "description": "Transforme fotos de celular em ensaios profissionais de estúdio com modelo IA em 30 segundos. Sem fotógrafo, sem estúdio, sem complicação.",
-    "url": "https://stuudia.com",
+    "url": "https://www.stuudia.com",
     "applicationCategory": "PhotoEditingApplication",
     "operatingSystem": "Web, iOS, Android",
     "offers": [
@@ -48,24 +48,24 @@ export function SchemaMarkup() {
     "screenshot": [
       {
         "@type": "ImageObject",
-        "url": "https://stuudia.com/bonus-gratis/screenshot-1.jpg",
+        "url": "https://www.stuudia.com/bonus-gratis/screenshot-1.jpg",
         "caption": "Antes e depois - Transformação com StuudIA"
       },
       {
         "@type": "ImageObject", 
-        "url": "https://stuudia.com/bonus-gratis/screenshot-2.jpg",
+        "url": "https://www.stuudia.com/bonus-gratis/screenshot-2.jpg",
         "caption": "Interface do StuudIA"
       }
     ],
     "author": {
       "@type": "Organization",
       "name": "StuudIA",
-      "url": "https://stuudia.com"
+      "url": "https://www.stuudia.com"
     },
     "publisher": {
       "@type": "Organization",
       "name": "StuudIA",
-      "url": "https://stuudia.com"
+      "url": "https://www.stuudia.com"
     }
   }
 

@@ -49,14 +49,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://stuudia.com/bonus-gratis'),
+  metadataBase: new URL('https://www.stuudia.com/bonus-gratis'),
   alternates: {
     canonical: '/bonus-gratis/',
   },
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://stuudia.com/bonus-gratis',
+    url: 'https://www.stuudia.com/bonus-gratis',
     title: 'StuudIA - Transforme Fotos de Celular em Ensaios Profissionais com IA',
     description: 'Transforme fotos de celular em ensaios profissionais de estúdio com modelo IA em 30 segundos. Sem fotógrafo, sem estúdio, sem complicação.',
     siteName: 'StuudIA',

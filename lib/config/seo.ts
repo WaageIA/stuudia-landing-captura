@@ -1,7 +1,7 @@
 export const seoConfig = {
   site: {
     name: 'StuudIA',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://stuudia.com/bonus-gratis',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://www.stuudia.com/bonus-gratis',
     description: 'Transforme fotos de celular em ensaios profissionais de estúdio com modelo IA em 30 segundos',
     keywords: [
       'fotos profissionais com IA',

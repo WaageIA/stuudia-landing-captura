@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/', '/admin/', '/dashboard/'],
     },
-    sitemap: 'https://stuudia.com/bonus-gratis/sitemap.xml',
+    sitemap: 'https://www.stuudia.com/bonus-gratis/sitemap.xml',
   }
 }
